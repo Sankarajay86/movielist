@@ -17,9 +17,11 @@ function App() {
     }
   };
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (query = '') => {
     try {
-      const endpoint = `${API_BASE_URL}/discover/movie?&sort_by=popularity.desc`;
+      const endpoint = query
+      ? `${API_BASE_URL}/search/movie?query=${query}` 
+      :`${API_BASE_URL}/discover/movie?&sort_by=popularity.desc`;
       const response = await fetch(endpoint, options);
 
       if (!response.ok) {
@@ -36,9 +38,8 @@ function App() {
   };
 
   useEffect(() => {
-    fetchMovies();
-    console.log("hello world");
-    },);
+    fetchMovies(searchTerm);
+    },[searchTerm]);
 
   return (
     <>
@@ -55,8 +56,14 @@ function App() {
             <section className='all_movies'>
               <h2>All Movies</h2>
               {error && <p className="error text-red-500">{error}</p>}
+                <div>
+                  {movies.map(movie=>(
+                    <div>
 
-              <div className="movies-grid">
+                    </div>
+                  ))}
+                </div>
+              <div className="movie-grid">
                 {movies.map(movie => (
                   <div key={movie.id} className="movie-card">
                     <img
@@ -64,6 +71,7 @@ function App() {
                       alt={movie.title}
                     />
                     <h3>{movie.title}</h3>
+                    <h3>{movie.original_language}n</h3>
                   </div>
                 ))}
               </div>
